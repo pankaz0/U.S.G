@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Us | USG</title>
+    <link rel="icon" href="logo.jpg" type="image/x-icon">
+
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root {
+            --gold: #FFA500;
+            --dark: #111;
+            --light: #f9f9f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        .text-gold { color: var(--gold); }
+
+        /* --- HEADER & NAV --- */
+        .master-header {
+            position: relative;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            text-align: center;
+            overflow: hidden;
+            background-image: radial-gradient(#f1f1f1 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .top-bar { position: absolute; top: 25px; left: 25px; display: flex; align-items: center; z-index: 100; }
+        .menu-trigger { font-size: 30px; cursor: pointer; color: #333; margin-right: 15px; transition: 0.3s; line-height: 1; }
+        .menu-trigger:hover { color: var(--gold); }
+        .brand-text { font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; color: #000; line-height: 1; }
+
+        .animated-title {
+            font-size: 3.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; line-height: 1;
+            background: linear-gradient(to right, #000 20%, #FFA500 40%, #FFD700 50%, #FFA500 60%, #000 80%);
+            background-size: 200% auto; color: #000;
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+        .animated-subtitle { margin-top: 10px; font-size: 1rem; letter-spacing: 3px; color: #666; text-transform: uppercase; font-weight: 600; }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* Side Menu */
+        .sidenav {
+            height: 100%; width: 0; position: fixed; z-index: 200; top: 0; left: 0;
+            background-color: #f4f4f4; overflow-x: hidden; transition: 0.4s;
+            padding-top: 60px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
+        }
+        .sidenav a { padding: 15px 30px; text-decoration: none; font-size: 1.2rem; color: #333; display: block; transition: 0.3s; border-bottom: 1px solid #ddd; }
+        .sidenav a:hover { color: var(--gold); background: #ffffff; padding-left: 40px; }
+        .sidenav .closebtn { position: absolute; top: 0; right: 15px; font-size: 36px; border-bottom: none; color: #333; }
+        #overlay { position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 150; cursor: pointer; }
+
+
+        /* --- JOIN PAGE STYLES --- */
+        .benefits-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 60px 0; }
+        .benefit-card { text-align: center; padding: 30px; background: #fff; border-radius: 12px; border: 1px solid #eee; transition: 0.3s; }
+        .benefit-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .b-icon { width: 60px; height: 60px; fill: var(--gold); margin-bottom: 20px; animation: float 3s infinite ease-in-out; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .b-title { font-weight: 800; margin-bottom: 10px; font-size: 1.2rem; }
+        .b-text { font-size: 0.95rem; color: #666; }
+
+        .reg-container { background: #f9f9f9; border-radius: 20px; padding: 50px; margin-bottom: 80px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); position: relative; overflow: hidden; }
+        .reg-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--gold); }
+        .form-header { text-align: center; margin-bottom: 40px; }
+        .form-header h2 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; }
+        .form-header p { color: #666; }
+
+        .join-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .full-width { grid-column: span 2; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; color: #444; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; background: #fff; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1); }
+        .form-textarea { height: 100px; resize: vertical; }
+
+        .join-btn { background: #111; color: #fff; padding: 18px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; width: 100%; letter-spacing: 1px; }
+        .join-btn:hover { background: var(--gold); color: #000; box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3); }
+
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .checkbox-group input { width: 18px; height: 18px; accent-color: var(--gold); }
+        .checkbox-group label { font-size: 0.9rem; color: #555; cursor: pointer; }
+
+        @media screen and (max-width: 768px) {
+            .join-form { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .reg-container { padding: 30px 20px; }
+            .animated-title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="../index.html">Home</a>
+        <a href="events.html">Events & Activities</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="join.html" style="color: #FFA500;">Join Us</a>
+        <a href="about.html">About Us</a>
+        <a href="support.html">Contact/Support</a>
+    </div>
+
+    <section class="master-header">
+        <div class="top-bar">
+            <span class="menu-trigger" onclick="openNav()">&#9776;</span>
+            <div class="brand-text">U<span class="text-gold">S</span>G</div>
+        </div>
+        <h1 class="animated-title">Become a Member</h1>
+        <p class="animated-subtitle">Start your journey today</p>
+    </section>
+
+    <div class="container">
+        
+        <div class="benefits-section">
+            <div class="benefit-card">
+                <svg class="b-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                <h3 class="b-title">Global Network</h3>
+                <p class="b-text">Connect with like-minded students, alumni, and industry professionals from various fields.</p>
+            </div>
+            <div class="benefit-card">
+                <svg class="b-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <h3 class="b-title">Exclusive Access</h3>
+                <p class="b-text">Get priority entry to workshops, events, and premium resources not available to the public.</p>
+            </div>
+            <div class="benefit-card">
+                <svg class="b-icon" viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                <h3 class="b-title">Career Growth</h3>
+                <p class="b-text">Build your resume with leadership roles, project experience, and skill development programs.</p>
+            </div>
+        </div>
+
+        <div class="reg-container">
+            <div class="form-header">
+                <h2>Registration Form</h2>
+                <p>Fill in your details below to join the Unified Student Group.</p>
+            </div>
+
+            <form class="join-form" action="https://formsubmit.co/rawalpankaj44444@gmail.com" method="POST" onsubmit="return validateForm()">
+                
+                <input type="text" name="_honey" style="display:none">
+                <input type="hidden" name="_captcha" value="false">
+
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="First Name" id="firstName" class="form-input" placeholder="John" required pattern="[A-Za-z ]+" title="Letters only, no numbers">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="Last Name" id="lastName" class="form-input" placeholder="Doe" required pattern="[A-Za-z ]+" title="Letters only, no numbers">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="Email" class="form-input" placeholder="john@college.edu" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number (10 Digits)</label>
+                    <input type="tel" 
+                           name="Phone" 
+                           id="phoneInput" 
+                           class="form-input" 
+                           placeholder="Enter 10-digit number" 
+                           maxlength="10" 
+                           pattern="[0-9]{10}"
+                           title="Please enter exactly 10 digits"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Department / Stream</label>
+                    <select name="Department" class="form-select">
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Arts & Design">Arts & Design</option>
+                        <option value="Business">Business / Management</option>
+                        <option value="Science">Science</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Year</label>
+                    <select name="Year" class="form-select">
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                        <option value="5th Year">5th Year</option> </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">I am interested in joining as:</label>
+                    <select name="Role Interest" class="form-select">
+                        <option value="General Member">General Member (Access to events & community)</option>
+                        <option value="Volunteer">Volunteer (Help organize events)</option>
+                        <option value="Ambassador">Campus Ambassador (Lead USG in your class)</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Why do you want to join USG? (Min 20 chars)</label>
+                    <textarea name="Message" id="messageBox" class="form-textarea" placeholder="Tell us about your interests..." minlength="20" required></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to abide by the rules and code of conduct of USG.</label>
+                    </div>
+                </div>
+
+                <div class="form-group full-width" style="margin-top: 20px;">
+                    <button type="submit" class="join-btn">Submit Application</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // --- FORM VALIDATION SCRIPT ---
+        function validateForm() {
+            // 1. Check Phone Number Length
+            var phone = document.getElementById("phoneInput").value;
+            if (phone.length !== 10) {
+                alert("Error: Phone number must be exactly 10 digits.");
+                return false; // Stop submission
+            }
+
+            // 2. Check Name
+            var firstName = document.getElementById("firstName").value;
+            if (firstName.length < 2) {
+                alert("Error: Name is too short.");
+                return false;
+            }
+
+            // 3. Check Message Length
+            var message = document.getElementById("messageBox").value;
+            if (message.length < 20) {
+                alert("Error: Please write at least 20 characters in the 'Why do you want to join?' section.");
+                return false;
+            }
+
+            return true; // Allow submission
+        }
+
+        // --- NAVIGATION SCRIPT ---
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academics | USG</title>
+    <link rel="icon" href="logo.jpg" type="image/x-icon">
+
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root {
+            --gold: #FFA500;
+            --dark: #111;
+            --light: #f9f9f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        .text-gold { color: var(--gold); }
+
+        /* --- ANIMATIONS --- */
+        @keyframes slideInRight { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes shine { to { background-position: 200% center; } }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- HEADER --- */
+        .master-header {
+            position: relative; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: #ffffff; text-align: center; overflow: hidden;
+            background-image: radial-gradient(#f1f1f1 1px, transparent 1px); background-size: 20px 20px; border-bottom: 1px solid #eee;
+        }
+
+        .top-bar { position: absolute; top: 25px; left: 25px; display: flex; align-items: center; z-index: 100; }
+        .menu-trigger { font-size: 30px; cursor: pointer; color: #333; margin-right: 15px; transition: 0.3s; line-height: 1; }
+        .menu-trigger:hover { color: var(--gold); }
+        .brand-text { font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; color: #000; line-height: 1; }
+
+        .animated-title {
+            font-size: 3.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; line-height: 1;
+            background: linear-gradient(to right, #000 20%, #FFA500 40%, #FFD700 50%, #FFA500 60%, #000 80%);
+            background-size: 200% auto; color: #000;
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: slideInRight 1s ease-out forwards, shine 4s linear infinite;
+        }
+        .animated-subtitle { margin-top: 10px; font-size: 1rem; letter-spacing: 3px; color: #666; text-transform: uppercase; font-weight: 600; }
+
+        /* Side Menu */
+        .sidenav {
+            height: 100%; width: 0; position: fixed; z-index: 200; top: 0; left: 0;
+            background-color: #f4f4f4; overflow-x: hidden; transition: 0.4s;
+            padding-top: 60px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
+        }
+        .sidenav a { padding: 15px 30px; text-decoration: none; font-size: 1.2rem; color: #333; display: block; transition: 0.3s; border-bottom: 1px solid #ddd; }
+        .sidenav a:hover { color: var(--gold); background: #ffffff; padding-left: 40px; }
+        .sidenav .closebtn { position: absolute; top: 0; right: 15px; font-size: 36px; border-bottom: none; color: #333; }
+        #overlay { position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 150; cursor: pointer; }
+
+        /* --- TOOLS GRID --- */
+        .section-header { text-align: center; margin: 60px 0 40px; }
+        .section-header h2 { font-size: 2rem; font-weight: 900; }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .tool-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .tool-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gold); }
+
+        .tool-icon {
+            width: 50px; height: 50px; background: #111; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+        }
+        .tool-icon svg { width: 24px; height: 24px; fill: var(--gold); }
+
+        .tool-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
+        .tool-desc { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+
+        /* Inputs & Buttons Shared */
+        .input-group { margin-bottom: 15px; }
+        .app-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; transition: 0.3s; }
+        .app-input:focus { border-color: var(--gold); }
+        .app-btn { width: 100%; padding: 12px; background: #111; color: #fff; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .app-btn:hover { background: var(--gold); color: #000; }
+        
+        .result-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-radius: 8px; text-align: center; font-weight: 700; display: none; }
+
+        /* Timer Specifics */
+        .timer-display { font-size: 3rem; font-weight: 900; text-align: center; margin: 20px 0; font-variant-numeric: tabular-nums; }
+        .timer-controls { display: flex; gap: 10px; }
+        .btn-reset { background: #eee; color: #333; }
+        .btn-reset:hover { background: #ddd; color: #000; }
+
+        /* --- RESOURCE LIBRARY (UPDATED FOR LINKS) --- */
+        .filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-btn { background: #fff; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: #111; color: #fff; border-color: #111; }
+
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 80px; }
+        
+        /* Changed to Anchor Tag Styling */
+        .resource-card { 
+            display: block; /* Makes the link behave like a box */
+            text-decoration: none; /* Removes underline */
+            color: inherit; /* Inherits text color */
+            background: #fff; 
+            border: 1px solid #eee; 
+            border-radius: 12px; 
+            padding: 25px; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            position: relative;
+        }
+        
+        .resource-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-color: var(--gold); }
+        
+        /* Small external link icon */
+        .resource-card::after {
+            content: '↗';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ccc;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .resource-card:hover::after { color: var(--gold); }
+
+        .res-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; color: #333; }
+        .res-sub { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; display: block; }
+
+        @media screen and (max-width: 768px) {
+            .tools-grid { grid-template-columns: 1fr; }
+            .animated-title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="../index.html">Home</a>
+        <a href="events.html">Events & Activities</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="join.html">Join Us</a>
+        <a href="about.html">About Us</a>
+        <a href="support.html">Contact/Support</a>
+    </div>
+
+    <section class="master-header">
+        <div class="top-bar">
+            <span class="menu-trigger" onclick="openNav()">&#9776;</span>
+            <div class="brand-text">U<span class="text-gold">S</span>G</div>
+        </div>
+        <h1 class="animated-title">Academic Hub</h1>
+        <p class="animated-subtitle">Smart Tools for Smart Students</p>
+    </section>
+
+    <div class="container">
+        
+        <div class="section-header reveal active">
+            <h2>Productivity Tools</h2>
+        </div>
+
+        <div class="tools-grid reveal active">
+
+            <div class="tool-card">
+                <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 2h5v5h-5V5zM7 10h5v5H7v-5zm5 9H7v-5h5v5zm2-5v5h5v-5h-5z"/></svg></div>
+                <h3 class="tool-title">CGPA Estimator</h3>
+                <p class="tool-desc">Quickly estimate your semester GPA based on credits.</p>
+                
+                <div class="input-group" style="display:flex; gap:10px;">
+                    <input type="number" id="g1" class="app-input" placeholder="Grade 1">
+                    <input type="number" id="c1" class="app-input" placeholder="Credit 1">
+                </div>
+                <div class="input-group" style="display:flex; gap:10px;">
+                    <input type="number" id="g2" class="app-input" placeholder="Grade 2">
+                    <input type="number" id="c2" class="app-input" placeholder="Credit 2">
+                </div>
+                <button class="app-btn" onclick="calculateCGPA()">Calculate GPA</button>
+                <div id="gpaResult" class="result-box"></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></div>
+                <h3 class="tool-title">Attendance Manager</h3>
+                <p class="tool-desc">Check if you are safe (75% rule) or if you can bunk.</p>
+                
+                <div class="input-group">
+                    <input type="number" id="totalClasses" class="app-input" placeholder="Total Classes Held">
+                </div>
+                <div class="input-group">
+                    <input type="number" id="attendedClasses" class="app-input" placeholder="Classes You Attended">
+                </div>
+                <button class="app-btn" onclick="checkAttendance()">Check Status</button>
+                <div id="attResult" class="result-box"></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+                <h3 class="tool-title">Focus Timer</h3>
+                <p class="tool-desc">Pomodoro technique (25 min) to boost study focus.</p>
+                
+                <div class="timer-display" id="timer">25:00</div>
+                <div class="timer-controls">
+                    <button class="app-btn" onclick="startTimer()" id="startBtn">Start</button>
+                    <button class="app-btn btn-reset" onclick="resetTimer()">Reset</button>
+                </div>
+                <div id="timerStatus" class="result-box" style="background:#fff; color:var(--gold); display:block;">Ready to focus?</div>
+            </div>
+
+        </div>
+
+        <div class="section-header reveal active">
+            <h2>Resource Library</h2>
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterRes('all')">All</button>
+                <button class="filter-btn" onclick="filterRes('cs')">Comp. Sci</button>
+                <button class="filter-btn" onclick="filterRes('eng')">Engineering</button>
+            </div>
+        </div>
+
+        <div class="resource-grid" id="resGrid">
+            
+            <a href="https://drive.google.com" target="_blank" class="resource-card reveal active" data-cat="cs">
+                <h3 class="res-title">Data Structures Notes</h3>
+                <span class="res-sub">CS • PDF • Dr. Smith</span>
+            </a>
+
+            <a href="https://example.com/thermo.pdf" target="_blank" class="resource-card reveal active" data-cat="eng">
+                <h3 class="res-title">Thermodynamics</h3>
+                <span class="res-sub">Mech • E-Book • 5th Ed</span>
+            </a>
+
+            <a href="#" target="_blank" class="resource-card reveal active" data-cat="cs">
+                <h3 class="res-title">Python Cheat Sheet</h3>
+                <span class="res-sub">CS • Image • Quick Ref</span>
+            </a>
+
+            <a href="#" target="_blank" class="resource-card reveal active" data-cat="eng">
+                <h3 class="res-title">Circuit Theory</h3>
+                <span class="res-sub">Electrical • Past Papers</span>
+            </a>
+
+             <a href="#" target="_blank" class="resource-card reveal active" data-cat="cs">
+                <h3 class="res-title">Web Dev Roadmap</h3>
+                <span class="res-sub">CS • Guide • 2024</span>
+            </a>
+
+            
+        </div>
+
+    </div>
+
+    <script>
+        // NAV
+        function openNav() { document.getElementById("mySidenav").style.width = "250px"; document.getElementById("overlay").style.display = "block"; }
+        function closeNav() { document.getElementById("mySidenav").style.width = "0"; document.getElementById("overlay").style.display = "none"; }
+
+        // --- 1. CGPA CALC ---
+        function calculateCGPA() {
+            let g1 = parseFloat(document.getElementById('g1').value) || 0;
+            let c1 = parseFloat(document.getElementById('c1').value) || 0;
+            let g2 = parseFloat(document.getElementById('g2').value) || 0;
+            let c2 = parseFloat(document.getElementById('c2').value) || 0;
+
+            let totalPoints = (g1*c1) + (g2*c2);
+            let totalCredits = c1 + c2;
+
+            if (totalCredits > 0) {
+                let gpa = totalPoints / totalCredits;
+                let box = document.getElementById('gpaResult');
+                box.style.display = 'block';
+                box.innerHTML = "Estimated GPA: <span style='color:var(--gold); font-size:1.2rem;'>" + gpa.toFixed(2) + "</span>";
+            } else {
+                alert("Enter at least one grade and credit.");
+            }
+        }
+
+        // --- 2. ATTENDANCE MANAGER ---
+        function checkAttendance() {
+            let total = parseFloat(document.getElementById('totalClasses').value);
+            let attended = parseFloat(document.getElementById('attendedClasses').value);
+            let box = document.getElementById('attResult');
+            
+            if (!total || !attended || attended > total) {
+                alert("Please enter valid class numbers.");
+                return;
+            }
+
+            let percentage = (attended / total) * 100;
+            let message = "";
+            let color = "";
+
+            if (percentage >= 75) {
+                let bunkable = Math.floor((attended - (0.75 * total)) / 0.75);
+                message = "Safe! " + percentage.toFixed(1) + "%. You can bunk " + bunkable + " classes.";
+                color = "#2ecc71"; // Green
+            } else {
+                let needed = Math.ceil(((0.75 * total) - attended) / 0.25);
+                message = "Warning! " + percentage.toFixed(1) + "%. Attend next " + needed + " classes.";
+                color = "#e74c3c"; // Red
+            }
+
+            box.style.display = 'block';
+            box.style.color = color;
+            box.innerText = message;
+        }
+
+        // --- 3. FOCUS TIMER ---
+        let timer;
+        let timeLeft = 25 * 60;
+        let isRunning = false;
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById('startBtn').innerText = "Running...";
+            document.getElementById('timerStatus').innerText = "Stay Focused!";
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    isRunning = false;
+                    document.getElementById('timerStatus').innerText = "Time's Up! Take a break.";
+                    alert("Focus Session Complete!");
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+            document.getElementById('startBtn').innerText = "Start";
+            document.getElementById('timerStatus').innerText = "Ready to focus?";
+        }
+
+        function updateTimerDisplay() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // --- RESOURCE FILTER ---
+        function filterRes(category) {
+            let items = document.getElementsByClassName('resource-card');
+            let btns = document.getElementsByClassName('filter-btn');
+            
+            for (let b of btns) {
+                b.classList.remove('active');
+                if (b.innerText.toLowerCase().includes(category) || (category === 'all' && b.innerText === 'All')) {
+                    b.classList.add('active');
+                }
+            }
+
+            for (let i = 0; i < items.length; i++) {
+                if (category === 'all') {
+                    items[i].style.display = 'block';
+                } else {
+                    if (items[i].getAttribute('data-cat') === category) {
+                        items[i].style.display = 'block';
+                    } else {
+                        items[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+        
+        // SCROLL REVEAL
+        window.addEventListener('scroll', reveal);
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+            for (var i = 0; i < reveals.length; i++) {
+                var windowheight = window.innerHeight;
+                var revealtop = reveals[i].getBoundingClientRect().top;
+                var revealpoint = 150;
+                if (revealtop < windowheight - revealpoint) { reveals[i].classList.add('active'); }
+            }
+        }
+    </script>
+
+</body>
+</html>
