@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USG | Unified Student Group</title>
+    <link rel="icon" href="logo.jpg" type="image/x-icon">
+
+    <style>
+        /* --- RESET & BASIC STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- UTILITIES --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .text-gold { color: #FFA500; }
+
+        /* --- MASTER HEADER --- */
+        .master-header {
+            position: relative;
+            height: 350px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            text-align: center;
+            overflow: hidden;
+            background-image: radial-gradient(#f1f1f1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .menu-trigger {
+            font-size: 30px;
+            cursor: pointer;
+            color: #333;
+            margin-right: 15px;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+        .menu-trigger:hover { color: #FFA500; }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #000;
+            line-height: 1;
+        }
+
+        /* --- ANIMATED TEXT --- */
+        .animated-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 1;
+            background: linear-gradient(to right, #000 20%, #FFA500 40%, #FFD700 50%, #FFA500 60%, #000 80%);
+            background-size: 200% auto;
+            color: #000;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+
+        .animated-subtitle {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeUp 1s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- SIDE MENU --- */
+        .sidenav {
+            height: 100%; width: 0; position: fixed; z-index: 200; top: 0; left: 0;
+            background-color: #f4f4f4; overflow-x: hidden; transition: 0.4s;
+            padding-top: 60px; 
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1); /* No Border */
+        }
+        .sidenav a {
+            padding: 15px 30px; text-decoration: none; font-size: 1.2rem; color: #333;
+            display: block; transition: 0.3s; border-bottom: 1px solid #ddd;
+        }
+        .sidenav a:hover { color: #FFA500; background: #ffffff; padding-left: 40px; }
+        .sidenav .closebtn { position: absolute; top: 0; right: 15px; font-size: 36px; border-bottom: none; color: #333; }
+        
+        #overlay {
+            position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.5); z-index: 150; cursor: pointer;
+        }
+
+        /* --- DESIGNED TEXT SECTION --- */
+        .designed-text-section {
+            text-align: center; padding: 20px 20px 20px 20px; max-width: 800px; margin: 0 auto;
+        }
+        .designed-heading {
+            font-size: 2.5rem; font-weight: 900; color: #111; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 15px; position: relative; display: inline-block;
+        }
+        .designed-heading::after {
+            content: ''; display: block; width: 50%; height: 5px; background: #FFA500;
+            margin: 10px auto 0; border-radius: 3px;
+        }
+        .designed-subtext { font-size: 1.2rem; color: #666; font-weight: 400; font-style: italic; }
+
+        /* --- 6 BOXES GRID --- */
+        .features-section { padding: 40px 0 80px 0; background-color: #ffffff; }
+        .grid-6 {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; padding: 0 20px;
+        }
+
+        .animated-icon-wrapper {
+            height: 70px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+        }
+        .animated-svg { width: 60px; height: 60px; fill: #FFA500; }
+
+        @keyframes float-up-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes pulse-slow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: 0.9; } }
+        @keyframes swing-gentle { 0% { transform: rotate(0deg); } 25% { transform: rotate(3deg); } 75% { transform: rotate(-3deg); } 100% { transform: rotate(0deg); } }
+        
+        .anim-float { animation: float-up-down 3s ease-in-out infinite; }
+        .anim-pulse { animation: pulse-slow 2.5s ease-in-out infinite; }
+        .anim-swing { animation: swing-gentle 4s ease-in-out infinite; }
+
+        /* CLICKABLE BOX CARD STYLES */
+        .box-card {
+            display: block; /* Makes the anchor tag behave like a box */
+            background: #fff; padding: 40px 30px; border-radius: 12px; border: 1px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease;
+            position: relative; overflow: hidden; text-align: center;
+            
+            /* Remove default link underline and color */
+            text-decoration: none; 
+            color: inherit; 
+            cursor: pointer;
+        }
+
+        .box-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: #FFA500; }
+        
+        .box-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: #FFA500; transform: scaleX(0); transition: transform 0.3s ease;
+        }
+        .box-card:hover::before { transform: scaleX(1); }
+        
+        .box-title { font-size: 1.4rem; margin-bottom: 15px; font-weight: 800; color: #222; text-transform: uppercase; }
+        .box-desc { font-size: 0.95rem; color: #666; line-height: 1.6; }
+
+        /* --- RESPONSIVE --- */
+        @media screen and (max-width: 600px) {
+            .animated-title { font-size: 2.5rem; padding: 0 10px; }
+            .master-header { height: 250px; }
+            .designed-heading { font-size: 1.8rem; }
+            .grid-6 { grid-template-columns: 1fr; }
+        }
+
+    /*button bottom*/
+ /* --- SEAMLESS BOTTOM CTA --- */
+.bottom-cta {
+    padding: 120px 20px; /* Generous spacing for premium feel */
+    background: #ffffff; /* Pure white to connect with page */
+    text-align: center;
+    position: relative;
+    /* No borders, no lines, no gaps */
+}
+
+/* Typography is the visual hook now */
+.cta-title {
+    font-size: 4rem; /* Massive, bold text */
+    font-weight: 900;
+    margin-bottom: 15px;
+    line-height: 1.1;
+    color: #000;
+    letter-spacing: -2px;
+}
+
+/* Optional: Gradient accent on the last word or full title */
+.cta-title span {
+    background: linear-gradient(to right, #B8860B, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cta-sub {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+}
+
+/* BUTTON CONTAINER */
+.btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* 1. JOIN BUTTON - Solid Luxury Gold */
+.btn-join {
+    background: #000; /* Black background for contrast */
+    color: #FFD700;   /* Gold Text */
+    padding: 20px 50px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 2px solid #000;
+}
+
+.btn-join:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* 2. INSTAGRAM BUTTON - Minimalist */
+.btn-insta {
+    background: transparent;
+    color: #333;
+    padding: 20px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-insta svg { 
+    width: 24px; 
+    height: 24px; 
+    fill: #333; 
+    transition: 0.3s;
+}
+
+.btn-insta:hover {
+    color: #E1306C; /* Instagram Pink */
+}
+.btn-insta:hover svg {
+    fill: #E1306C;
+    transform: scale(1.1);
+}
+
+@media screen and (max-width: 768px) {
+    .cta-title { font-size: 2.5rem; }
+    .btn-container { flex-direction: column; width: 100%; }
+    .btn-join, .btn-insta { width: 100%; max-width: 350px; justify-content: center; }
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        
+        <a href="index.html" style="color: #FFA500;">Home</a>
+        <a href="new/events.html">Events & Activities</a>
+        <a href="new/leaderboard.html">Leaderboard</a>
+        <a href="new/join.html">Join Us</a>
+        <a href="new/about.html">About Us</a>
+        <a href="new/support.html">Contact/Support</a>
+    </div>
+
+    <section class="master-header">
+        <div class="top-bar">
+            <span class="menu-trigger" onclick="openNav()">&#9776;</span>
+            <div class="brand-text">U<span class="text-gold">S</span>G</div>
+        </div>
+        <br><br><br><h1 class="animated-title">UNIFIED STUDENTS GROUP</h1>
+        <p class="animated-subtitle">ESTD 2026</p>
+    </section>
+
+    <div class="designed-text-section">
+        <p class="designed-subtext">"Explore the pillars of our community, from leadership to student success."</p>
+    </div>
+
+    <section class="features-section">
+        <div class="container">
+            <div class="grid-6">
+                
+                <a href="new/leadership.html" class="box-card">
+                    <div class="animated-icon-wrapper">
+                        <svg class="animated-svg anim-float" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm4.5 11.8c-1.24.78-2.76 1.2-4.5 1.2-1.74 0-3.26-.42-4.5-1.2V16c0-1.5 3-2.25 4.5-2.25S16.5 14.5 16.5 16v2.8z"/></svg>
+                    </div>
+                    <h3 class="box-title">Group Leadership</h3>
+                    <p class="box-desc">Meet the admins and core team guiding USG's vision and strategy.</p>
+                </a>
+
+                <a href="new/leaderboard.html" class="box-card">
+                    <div class="animated-icon-wrapper">
+                         <svg class="animated-svg anim-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                    </div>
+                    <h3 class="box-title">Leaderboard</h3>
+                    <p class="box-desc">Track top contributors, event winners, and active student rankings.</p>
+                </a>
+
+                <a href="new/events.html" class="box-card">
+                    <div class="animated-icon-wrapper">
+                        <svg class="animated-svg anim-swing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+                    </div>
+                    <h3 class="box-title">Events & Activities</h3>
+                    <p class="box-desc">Stay updated on upcoming meets, workshops, and student gatherings.</p>
+                </a>
+
+                <a href="new/directory.html" class="box-card">
+                    <div class="animated-icon-wrapper">
+                        <svg class="animated-svg anim-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    </div>
+                    <h3 class="box-title">Members</h3>
+                    <p class="box-desc">Meet our members and view their academic details, activity status, and performance points.</p>
+                </a>
+
+                <a href="new/academic.html" class="box-card">
+                    <div class="animated-icon-wrapper">
+                        <svg class="animated-svg anim-float" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+                    </div>
+                    <h3 class="box-title">Academic Support</h3>
+                    <p class="box-desc">Access study notes, peer mentorship, and exam preparation resources.</p>
+                </a>
+
+                
+
+                <a href="new/support.html" class="box-card">
+                    <div class="animated-icon-wrapper">
+                        <svg class="animated-svg anim-swing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+                    </div>
+                    <h3 class="box-title">Help & Information</h3>
+                    <p class="box-desc">Rules, guidelines, and support for all your group-related queries.</p>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!--BUTTON-->
+    <section class="bottom-cta reveal active">
+    
+    <h2 class="cta-title">Start Your <span>Legacy.</span></h2>
+    <p class="cta-sub">Join the Unified Students Group today. Connect with leaders, attend exclusive events, and shape the future.</p>
+    
+    <div class="btn-container">
+        <a href="https://chat.whatsapp.com/KEymLDOZp6CAZ3rbjrdg6X" class="btn-join">Join USG Now</a>
+
+        <a href="https://instagram.com/unifiedstudentsgroup.uok" target="_blank" class="btn-insta">
+            <svg viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+            Follow on Instagram
+        </a>
+    </div>
+
+</section>
+
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
